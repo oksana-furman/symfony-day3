@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dishes{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <h1 class="text-center m-5 p-5">Add a dish</h1>
+
+        {{form_start(form)}}
+        {{form_widget(form)}}
+        {{form_end(form)}}
+                {# <div class="item">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                          <img src="{{ dish.image }}" alt="{{ dish.name }}">
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                         <h5>{{ dish.name }}</h5>
+                         <p>{{ dish.description }}</p>
+                         <a href="/" class="btn btn-success">Back to the main page</a>
+                        </div>
+                      </div>
+                </div> #}
+
+    </div>
+   
+{% endblock %}
