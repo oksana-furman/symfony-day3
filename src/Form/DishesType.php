@@ -17,6 +17,6 @@ class DishesType extends AbstractType {
         ->add('price', TextType::class, ['attr' => ['class' => 'form-control m-2', 'placeholder' => 'Type the price of the dish']])
         ->add('description', TextareaType::class, ['attr' => ['class' => 'form-control m-2', 'placeholder' => 'Description']])
         // ->add('attachment', FileType::class, ['attr' => ['class' => 'form-control m-2', ]])
-        ->add('save', SubmitType::class, ['label' => 'Add dish', 'attr' => ['class' => 'btn-success m-2', ]]);
+        ->add('save', SubmitType::class, ['label' => 'Add dish', 'attr' => ['class' => 'btn btn-success m-2', ]]);
     }
 }

@@ -32,7 +32,7 @@ class FoodController extends AbstractController
     }
     
     #[Route('/create', name: 'app_food_create')]
-    public function create(ManagerRegistry $doctrine, Request $request, ): Response
+    public function create(ManagerRegistry $doctrine, Request $request): Response
     {
         $dish = new Dishes();
         $form = $this->createForm(DishesType::class, $dish);
@@ -42,12 +42,7 @@ class FoodController extends AbstractController
             $em = $doctrine->getManager();
             $em->persist($dish);
             $em->flush();
- 
-            $this->addFlash(
-                'notice',
-                'Dish Added'
-                );
-      
+
             return $this->redirectToRoute('app_food');
         }
 
@@ -56,19 +51,33 @@ class FoodController extends AbstractController
         ]);
     }
 
-    #[Route('/edit', name: 'app_food_edit')]
-    public function edit(): Response
+    #[Route('/edit/{id}', name: 'app_food_edit')]
+    public function edit(ManagerRegistry $doctrine, Request $request, $id): Response
     {
+        $dish = $doctrine->getRepository(Dishes::class)->find($id);
+        $form = $this->createForm(DishesType::class, $dish);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dish = $form->getData();
+            $em = $doctrine->getManager();
+            $em->persist($dish);
+            $em->flush();
+
+            return $this->redirectToRoute('app_food');
+        }
         return $this->render('food/edit.html.twig', [
-            'controller_name' => 'FoodController',
+            'form' => $form,  
         ]);
     }
 
-    #[Route('/food', name: 'app_food_delete')]
-    public function delete(): Response
+    #[Route('/delete/{id}', name: 'app_food_delete')]
+    public function delete(ManagerRegistry $doctrine, $id): Response
     {
-        return $this->render('food/delete.html.twig', [
-            'controller_name' => 'FoodController',
-        ]);
+        $dish = $doctrine->getRepository(Dishes::class)->find($id);
+        $em = $doctrine->getManager();
+        $em->remove($dish);
+        $em->flush();
+
+        return $this->redirectToRoute('app_food');
     }
 }
