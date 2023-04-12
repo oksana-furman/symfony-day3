@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Dishes;
 use App\Form\DishesType;
+use App\Service\FileUploader;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,19 +27,28 @@ class FoodController extends AbstractController
     public function details(ManagerRegistry $doctrine, $id): Response
     {
         $dish = $doctrine->getRepository(Dishes::class)->find($id);
+        $status = $dish->getFkStatus();
         return $this->render('food/details.html.twig', [
             'dish' => $dish,
+            'status' => $status,
         ]);
     }
     
     #[Route('/create', name: 'app_food_create')]
-    public function create(ManagerRegistry $doctrine, Request $request): Response
+    public function create(ManagerRegistry $doctrine, Request $request, FileUploader $fileUploader): Response
     {
         $dish = new Dishes();
         $form = $this->createForm(DishesType::class, $dish);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $dish = $form->getData();
+
+            $picture = $form->get('picture')->getData();
+            if ($picture) {
+                $pictureName = $fileUploader->upload($picture);
+                $dish->setPicture($pictureName);
+            }
+
             $em = $doctrine->getManager();
             $em->persist($dish);
             $em->flush();
@@ -52,13 +62,20 @@ class FoodController extends AbstractController
     }
 
     #[Route('/edit/{id}', name: 'app_food_edit')]
-    public function edit(ManagerRegistry $doctrine, Request $request, $id): Response
+    public function edit(ManagerRegistry $doctrine, Request $request, $id, FileUploader $fileUploader): Response
     {
         $dish = $doctrine->getRepository(Dishes::class)->find($id);
         $form = $this->createForm(DishesType::class, $dish);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $dish = $form->getData();
+
+            $picture = $form->get('picture')->getData();
+            if ($picture) {
+                $pictureName = $fileUploader->upload($picture);
+                $dish->setPicture($pictureName);
+            }
+
             $em = $doctrine->getManager();
             $em->persist($dish);
             $em->flush();

@@ -2,69 +2,36 @@
 
 namespace App\Entity;
 
+use App\Repository\DishesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Dishes
- *
- * @ORM\Table(name="dishes")
- * @ORM\Entity
- */
+#[ORM\Entity(repositoryClass: DishesRepository::class)]
 class Dishes
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="image", type="string", length=255, nullable=false)
-     */
-    private $image;
+    #[ORM\Column(length: 50)]
+    private ?string $name = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
-    private $name;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $picture = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="price", type="decimal", precision=5, scale=2, nullable=false)
-     */
-    private $price;
+    #[ORM\Column]
+    private ?float $price = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="string", length=500, nullable=false)
-     */
-    private $description;
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $description = null;
+
+    #[ORM\ManyToOne]
+    private ?Status $fk_status = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): self
-    {
-        $this->image = $image;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -79,12 +46,24 @@ class Dishes
         return $this;
     }
 
-    public function getPrice(): ?string
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?string $picture): self
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    public function setPrice(string $price): self
+    public function setPrice(float $price): self
     {
         $this->price = $price;
 
@@ -103,5 +82,15 @@ class Dishes
         return $this;
     }
 
+    public function getFkStatus(): ?Status
+    {
+        return $this->fk_status;
+    }
 
+    public function setFkStatus(?Status $fk_status): self
+    {
+        $this->fk_status = $fk_status;
+
+        return $this;
+    }
 }

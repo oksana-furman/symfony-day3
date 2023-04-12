@@ -10,7 +10,7 @@
             {% for dish in dishes %}
                 <div class="item">
                     <div class="card m-3" style="width: 18rem;">
-                        {# <img src="{{ dish.image }}" class="card-img-top" alt="{{ dish.name }}"> #}
+                        <img src="{{ asset("uploads/" ~ dish.picture ) }}" class="card-img-top" alt="{{ dish.name }}">
                         <div class="card-body text-center">
                         <h5 class="card-title">{{ dish.name }}</h5>
                         <p class="card-text">{{ dish.price }} &#8364;</p>

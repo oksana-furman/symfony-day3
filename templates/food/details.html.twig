@@ -10,11 +10,18 @@
                 <div class="item">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
-                          {# <img src="{{ dish.image }}" alt="{{ dish.name }}"> #}
+                          <img src="{{ asset("uploads/" ~ dish.picture ) }}" width="600px" alt="{{ dish.name }}">
                         </div>
                         <div class="flex-grow-1 ms-3">
                          <h5>{{ dish.name }}</h5>
                          <p>{{ dish.description }}</p>
+                        
+                         {% if status.name == "none" %}
+                         <p></p>
+                         {% else %}
+                         <p>{{ status.name }}</p>  
+                         {% endif %} 
+
                          <a href="/" class="btn btn-success">Back to the main page</a>
                         </div>
                       </div>
